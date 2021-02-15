@@ -1,0 +1,81 @@
+from tkinter import *
+import word_guess as wg
+
+
+def start(event):
+    word_length = int(length_entry.get())
+    answer = wg.setAnswer(word_length)
+    createLetterBox(answer)
+
+    
+def onGuess(event):
+    word = guess.get().upper()
+    if(wg.checkvalid(word)):
+        show_guess(word)
+        show_colour(wg.getcolours(word))
+
+def Quit(event):
+    exit()
+    
+
+def show_colour(colours):
+    for i in range(1,len(colours)):
+        entry[i].config(bg = colours[i])
+        
+def show_guess(guess):
+    for i in range(1,len(guess)):
+        entry[i].config(text = guess[i])
+
+def createLetterBox(answer):
+    for widget in m1.winfo_children():
+        widget.destroy()
+    entry.clear()
+
+    for i in range(len(answer)):
+        e = Label(m1, width=2, text = " ", font=("", 20))
+        m1.add(e)
+        entry[i] = e
+    entry[0].config(text = answer[0], bg = "green")
+    m1.config(width=42.5*len(answer)-1)
+
+
+
+entry = {}
+#creates a window
+window = Tk()
+window.geometry('{}x{}'.format(260, 350))
+window.title('Word Guesser')
+window.configure(bg='grey')
+
+#creates buttons, labels and entry fields to populate the window
+guesslbl = Label(window, text='Enter Guess',bg='grey', font=("Courier", 11), width=200)
+guesslbl.place(x=120, y=180, anchor="center")
+
+guess = Entry(window)
+guess.place(x=120, y=200, anchor="center")
+
+guess_btn = Button(window, text = 'Guess')
+guess_btn.bind('<Button-1>',onGuess)
+guess_btn.place(x=120, y=230, anchor="center")
+
+quit_btn = Button(window, text = 'Quit')
+quit_btn.bind('<Button-1>',Quit)
+quit_btn.grid(row=3,column=1)
+
+lengthlbl = Label(window, text='Length:',bg='grey', font=("Courier", 11))
+lengthlbl.place(x=100, y=255, anchor="center")
+
+length_entry = Entry(window, width=3)
+length_entry.place(x=150, y=255, anchor="center")
+
+start_btn = Button(window, text = 'Start')
+start_btn.bind('<Button-1>',start)
+start_btn.place(x=120, y=280, anchor="center")
+
+
+m1 = PanedWindow(window)
+m1.place(x=40, y=100)
+
+window.mainloop()
+
+
